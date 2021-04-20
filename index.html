@@ -1,0 +1,33 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="css/litegraph.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<script type="text/javascript" src="scripts/litegraph.js"></script>
+	<script type="text/javascript" src="scripts/rng.js"></script>
+	<script type="text/javascript" src="scripts/main.js"></script>
+	<script type="text/javascript" src="scripts/Color.js"></script>
+	<script type="text/javascript" src="scripts/ColorGradient.js"></script>
+	<script type="text/javascript" src="scripts/GrassPatchGenerator.js"></script>
+	<script type="text/javascript" src="scripts/ExecuteGeneratorAtRandomPoints.js"></script>
+	
+</head>
+<body style='width:100%; height:100%'>
+	<div id="globalConfig">
+		<input type="button" value="reset" onclick="reset();">
+		<input type="button" value="quicksave" onclick="save();">
+		<input type="button" value="quickload" onclick="load();">
+		<input type="button" value="save as" onclick="saveAs();">
+		<input type="button" value="load from" onclick="loadFrom();">
+		<input type="button" value="pause" onclick="pause();">
+		<input type="button" value="play" onclick="play();">
+		
+	</div>
+	<canvas id='graphCanvas'></canvas>
+	<canvas id='resultCanvas'></canvas>
+	<div id="footer">
+	</div>
+	<script>
+		init();
+	</script>
+</body>
+</html>
