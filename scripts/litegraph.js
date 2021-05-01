@@ -3432,7 +3432,7 @@
      */
     LGraphNode.prototype.addWidget = function( type, name, value, callback, options )
 	{
-        if (!this.widgets) {
+		if (!this.widgets) {
             this.widgets = [];
         }
 
@@ -10361,7 +10361,6 @@ LGraphNode.prototype.executeAction = function(action)
 				if(callback)
 					callback(name,value);
 			}
-
 			return elem;
 		}
 
@@ -13178,6 +13177,13 @@ if (typeof exports != "undefined") {
                 str += Watch.toString(o[i]) + (i + 1 != o.length ? "," : "");
             }
             str += "]";
+            return str;
+        } else if (o.constructor === Object) {
+            var str = "{";
+            for (var i in o) {
+                str += i + "=" + Watch.toString(o[i]) + (i + 1 != o.length ? "," : "");
+            }
+            str += "}";
             return str;
         } else {
             return String(o);

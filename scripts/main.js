@@ -36,9 +36,9 @@ function init() {
 	
 	var resultCanvas = document.getElementById("resultCanvas");
 	var graphCanvas = document.getElementById("graphCanvas");
-	graphCanvas.width = 3*window.innerWidth/4 - borderSize*4 - barWidth;
+	graphCanvas.width = 7*window.innerWidth/8 - borderSize*4 - barWidth;
 	graphCanvas.height = window.innerHeight - barHeight;
-	resultCanvas.width = window.innerWidth/4 - borderSize*4 - barWidth;
+	resultCanvas.width = window.innerWidth/8 - borderSize*4 - barWidth;
 	resultCanvas.height = window.innerHeight - barHeight;
 	
 	graphCanvas = new LGraphCanvas("#graphCanvas", graph);
