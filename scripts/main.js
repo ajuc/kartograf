@@ -12,8 +12,8 @@ function save() {
 	if (!graph || !localStorage) {
 		return;
 	}
-	console.log("saved");
 	localStorage.setItem("quicksavedGraph", JSON.stringify( graph.serialize()));
+	console.log("saved");
 }
 
 function load() {
@@ -25,10 +25,71 @@ function load() {
 	if(data) {
 		graph.configure(JSON.parse(data));
 		graph.start();
+		console.log("loaded");
+	} else {
+		console.log("load failed");
 	}
 }
 
+function ensureEndsWith(filename, ending) {
+	if (filename.endsWith(ending)) {
+		return filename
+	} else {
+		return filename+ending;
+	}
+}
+
+function saveToFile() {
+	var filename = prompt("Enter filename to save", "generatorGraph.lg");
+	filename = ensureEndsWith(filename, ".lg");
+	if (!graph || !localStorage) {
+		return;
+	}
+	var json = JSON.stringify( graph.serialize());
+	var blob = new Blob([json], {
+    type: "text/plain;charset=utf-8;",
+	});
+	saveAs(blob, filename);
+	
+	console.log("saved");
+}
+
+function loadFromFile() {
+	var browser = document.getElementById("loadFileBrowser");
+	browser.click();
+	if(data) {
+		
+	}
+}
+
+function fileForLoadingChoosen(event) {
+	console.debug("event=" + event);
+	var file = event.target.files[0];
+	file.text().then((t) => {
+		console.debug("t=" + t);
+		var data = JSON.parse(t);
+		graph.configure(data);
+		graph.start();
+	});
+}
+
+function pause() {
+	graph.stop();
+}
+
+function play() {
+	graph.start();
+}
+
+function initListeners() {
+	document.getElementById("loadFileBrowser").addEventListener('change', (event) => {
+		var e = event;
+		fileForLoadingChoosen(e);
+	});
+}
+
 function init() {
+	initListeners();
 	graph = new LGraph();
 	var barHeight = 100;
 	var borderSize = 1;
@@ -43,8 +104,6 @@ function init() {
 	
 	graphCanvas = new LGraphCanvas("#graphCanvas", graph);
 	
-
-
 	var node_const = LiteGraph.createNode("basic/const");
 	node_const.pos = [200,200];
 	graph.add(node_const);

@@ -38,14 +38,10 @@
         }
 		internalGenerate(ctx, rng, params, stepNo, x0, y0, angle, curving, stepLength, trunkRadius) {
 			var forkNo;
-			var forks = 2; //Math.round(this.stepForkingProbability * rng() * 4);
+			var forks = Math.round(this.stepForkingProbability * rng() * 4);
 			var x1 = x0 + rng() * stepLength * Math.cos(angle);
 			var y1 = y0 + rng() * stepLength * Math.sin(angle);
 			var newAngle;
-			
-			//ctx.rect(Math.min(x0, x1), Math.min(y0, y1), Math.abs(x1-x0), Math.abs(y1-y0));
-			//ctx.fillStyle = this.colorGradient.apply(rng());
-			//ctx.fill();
 			
 			ctx.beginPath();
 			ctx.lineWidth = trunkRadius;
@@ -53,7 +49,6 @@
 			ctx.strokeStyle = this.colorGradient.apply(rng());
 			ctx.lineTo(x1, y1);
 			ctx.stroke();
-
 			
 			stepNo ++;
 			if (stepNo < this.steps) {
