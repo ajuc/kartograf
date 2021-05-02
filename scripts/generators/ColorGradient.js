@@ -28,6 +28,8 @@
 		}
 	}
 	
+	global.ColorGradient = ColorGradient;
+	
     function ColorGradientGenerator() {
 		this.addInput("first", "color");
 		this.addInput("last", "color");

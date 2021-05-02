@@ -5,6 +5,7 @@
 	<script type="text/javascript" src="scripts/litegraph.js"></script>
 	<script type="text/javascript" src="scripts/utils.js"></script>
 	<script type="text/javascript" src="scripts/FileSaver.js"></script>
+	<script type="text/javascript" src="scripts/vanilla-picker.min.js"></script>
 	<script type="text/javascript" src="scripts/rng.js"></script>
 	<script type="text/javascript" src="scripts/main.js"></script>
 	<script type="text/javascript" src="scripts/generators/Color.js"></script>
@@ -19,7 +20,7 @@
 </head>
 <body style='width:100%; height:100%'>
 	<input type="file" id="loadFileBrowser" style="position: fixed; top: -100em">
-	<input type="file" id="saveFileBrowser" style="position: fixed; top: -100em">
+	
 	<div id="globalConfig">
 		<input type="button" value="reset" onclick="reset();">
 		<input type="button" value="quicksave" onclick="save();">
@@ -28,7 +29,6 @@
 		<input type="button" value="load from" onclick="loadFromFile();">
 		<input type="button" value="pause" onclick="pause();">
 		<input type="button" value="play" onclick="play();">
-		
 	</div>
 	<canvas id='graphCanvas'></canvas>
 	<canvas id='resultCanvas'></canvas>
