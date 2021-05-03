@@ -36,14 +36,12 @@
 			return;
 		}
 
+		ctx.fillStyle = "#220000";
+		ctx.beginPath();
+		ctx.roundRect( 1, 70, this.size[0], this.size[1]-71, 8, 8);
+		ctx.fill();
 		if (this.generator) {
 			this.generator.generate(ctx, this.seed, this.params);
-		} else {
-			//button
-			ctx.fillStyle = "#ff0000";
-			ctx.beginPath();
-			ctx.roundRect( 0, 50, this.size[0], this.size[1]-50, 8, 8);
-			ctx.fill();
 		}
 	}
 	

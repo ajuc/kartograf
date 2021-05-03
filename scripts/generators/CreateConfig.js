@@ -129,29 +129,7 @@
     };
 
     UniversalWatch.toString = function(o) {
-        if (o == null) {
-            return "null";
-        } else if (o.constructor === Number) {
-            return o.toFixed(3);
-        } else if (o.constructor === Array) {
-            var str = "[";
-            for (var i = 0; i < o.length; ++i) {
-                str += UniversalWatch.toString(o[i]) + (i + 1 != o.length ? ",\n" : "");
-            }
-            str += "]";
-            return str;
-        } else if (o.constructor === Object) {
-            var str = "{";
-			var count=0;
-            for (var i in o) {
-                str += i + "=" + UniversalWatch.toString(o[i]) + (count + 1 < Object.keys(o).length ? ",\n" : "");
-				count++;
-            }
-            str += "}";
-            return str;
-        } else {
-            return String(o);
-        }
+        return anythingToString(o);
     };
 
 	UniversalWatch.prototype.computeSize = function(out) {

@@ -2,6 +2,39 @@ function isObject(object) {
   return object != null && typeof object === 'object';
 }
 
+function mergeParams(first, second) {
+	var result = {};
+	
+	
+	return result;
+}
+
+function anythingToString(o) {
+	if (o == null) {
+		return "null";
+	} else if (o.constructor === Number) {
+		return o.toFixed(3);
+	} else if (o.constructor === Array) {
+		var str = "[";
+		for (var i = 0; i < o.length; ++i) {
+			str += anythingToString(o[i]) + (i + 1 != o.length ? ",\n" : "");
+		}
+		str += "]";
+		return str;
+	} else if (o.constructor === Object) {
+		var str = "{";
+		var count=0;
+		for (var i in o) {
+			str += i + "=" + anythingToString(o[i]) + (count + 1 < Object.keys(o).length ? ",\n" : "");
+			count++;
+		}
+		str += "}";
+		return str;
+	} else {
+		return String(o);
+	}
+}
+
 function deepEqual(object1, object2) {
   if (object1 === object2) {
 	return true;
