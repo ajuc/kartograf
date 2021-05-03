@@ -143,14 +143,14 @@
 
         this.properties = {
 			radius: 100.0,
-			trunkRadius: 10.0,
+			trunkRadius: 6.0,
 			steps: 8,
-			stepLength: 8.0,
+			stepLength: 15.0,
 			stepLengthFactor: 1.0,
-			stepRadiusFactor: 1.0,
+			stepRadiusFactor: 0.8,
 			stepCurvingFactor: 1.0,
 			stepForkingProbability: 0.5,
-			leavesNumber: 100.0,
+			leavesNumber: 0.0,
 			leavesSize: 4.0,
 			leavesThickness: 3.0,
 			leavesRandomness: 0.5,
