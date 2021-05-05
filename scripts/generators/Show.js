@@ -33,7 +33,6 @@
 		
 		this.setOutputData(0, this.generator);
     };
-	
 	Show.prototype.onDrawBackground = function(ctx, graphcanvas, canvas, pos)
 	{
 		if(this.flags.collapsed) {
@@ -46,14 +45,14 @@
 		};
 		params = Object.assign(params, this.params);
 		
-		if (params === this.oldInputs || deepEqual(params, this.oldInputs)) {
+		if ((params === this.oldInputs || deepEqual(params, this.oldInputs))) {
 			this.setOutputData(0, this.oldOutput);
 			if (this.canvas && this.generator) {
-				ctx.drawImage(this.canvas, 2, 71);
+				ctx.drawImage(this.canvas, 2, 65);
 			}
 			return;
 		} else {
-			console.log("refreshing execute at random points generator");
+			console.log("refreshing Show");
 		}
 		
 		this.oldInputs = Object.assign({}, params);
@@ -61,15 +60,18 @@
 		
 		ctx.fillStyle = "#000000";
 		ctx.beginPath();
-		ctx.roundRect( 1, 70, this.size[0], this.size[1]-71, 8, 8);
+		ctx.roundRect( 1, 70, this.size[0], this.size[1]-73, 8, 8);
 		ctx.stroke();
 		if (this.generator) {
+			console.log("REDRAWING show: " + this.generator);
 			var genSize = this.generator.getSize();
+			this.canvas = null;
 			this.canvas = createOffscreenBuffer(genSize[0], genSize[1]);
 			var offscreenCtx = this.canvas.getContext("2d");
 			this.generator.generate(offscreenCtx, this.seed, this.params);
-			ctx.drawImage(this.canvas, 2, 71);
 			this.setSize(this.computeSize());
+			ctx.drawImage(this.canvas, 2, 71);
+			
 		} else {
 			ctx.fill();
 		}
