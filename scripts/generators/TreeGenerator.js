@@ -19,7 +19,7 @@
 			this.leavesRandomness = leavesRandomness;
 			this.trunkColorGradient = trunkColorGradient;
 			this.leavesColorGradient = leavesColorGradient;
-			console.log("trunkColorGradient=" + trunkColorGradient.toString() + " leavesColorGradient=" + leavesColorGradient.toString());
+			//console.log("trunkColorGradient=" + trunkColorGradient.toString() + " leavesColorGradient=" + leavesColorGradient.toString());
 		}
 		isEqual(other) {
             return (other instanceof Tree) &&
@@ -40,6 +40,44 @@
 					(	other.leavesColorGradient === this.leavesColorGradient
 					 || (this.leavesColorGradient && this.leavesColorGradient.isEqual(other.leavesColorGradient)));
         }
+		drawBranch(ctx, trunkRadius, x0, y0, rng, x1, y1) {
+			//return;
+			var strokeStyle = ctx.strokeStyle;
+			ctx.beginPath();
+			ctx.lineWidth = trunkRadius;
+			ctx.moveTo(x0, y0);
+			ctx.strokeStyle = this.trunkColorGradient.apply(rng());
+			ctx.lineTo(x1, y1);
+			ctx.stroke();
+			ctx.strokeStyle = strokeStyle;
+		}
+		drawLeaves(ctx, trunkRadius, branchX0, branchY0, rng, branchX1, branchY1, stepNo, steps) {
+			if (stepNo<steps/2) {
+				return;
+			}
+			var oldStrokeStyle = ctx.strokeStyle;
+			ctx.lineWidth = 5;
+			var R = ((Math.abs(branchX1-branchX0)+Math.abs(branchY1-branchY0))/2) + (trunkRadius * 80/(4*stepNo+1));
+			//ctx.ellipse((x0+x1)/2, (y0+y1)/2, r, r, 0.0, 0, 6.28);
+			var x = (branchX0 + branchX1)/2;
+			var y = (branchY0 + branchY1)/2;
+			
+			for (let i=0; i<this.leavesNumber/(Math.max(1,steps/2)); i++) {
+				var angle = rng() * 6.28;
+				var minR = Math.sqrt(Math.sqrt(Math.sqrt(rng()*rng()*rng()))) * R; //sqrt is needed cause it takes many more leaves to cover outer edge than inside
+				var maxR = minR + 5;
+				var x0 = x + Math.cos(angle) * minR;
+				var y0 = y + Math.sin(angle) * minR;
+				var x1 = x + Math.cos(angle) * maxR;
+				var y1 = y + Math.sin(angle) * maxR;
+				ctx.beginPath();
+				ctx.moveTo(x0, y0);
+				ctx.strokeStyle = this.leavesColorGradient.apply((Math.abs(angle-3.14))/((3.14))*0.75+(rng()-0.5)*0.5);
+				ctx.lineTo(x1, y1);
+				ctx.stroke();
+			}
+			ctx.strokeStyle = oldStrokeStyle;
+		}
 		internalGenerate(ctx, rng, params, stepNo, x0, y0, angle, curving, stepLength, trunkRadius, angleRange) {
 			if (!this.trunkColorGradient || !this.leavesColorGradient
 				|| !this.trunkColorGradient.apply
@@ -50,43 +88,30 @@
 			var forkNo;
 			var forkRng = rng();
 			
-			var forks = (forkRng < this.stepForkingProbability) ? 2 : (rng() < 0.85 ? 1 : 0);
+			var forks = (forkRng < this.stepForkingProbability) ? Math.round(1.5+rng()*rng()*(this.steps-stepNo)) : 1;
 			
-			var x1 = x0 + rng() * stepLength * Math.cos(angle);
-			var y1 = y0 + rng() * stepLength * Math.sin(angle);
+			var x1 = x0 + (0.1+rng()*0.9) * stepLength * Math.cos(angle);
+			var y1 = y0 + (0.1+rng()*0.9) * stepLength * Math.sin(angle);
 			var newAngle;
+
+			var seed = rng();
 			
-			var strokeStyle = ctx.strokeStyle;
-			ctx.beginPath();
-			ctx.lineWidth = trunkRadius;
-			ctx.moveTo(x0, y0);
-			ctx.strokeStyle = this.trunkColorGradient.apply(rng());
-			ctx.lineTo(x1, y1);
-			ctx.stroke();
-			ctx.strokeStyle = strokeStyle;
+			this.drawBranch(ctx, trunkRadius, x0, y0, createRNG(seed + 107 * stepNo), x1, y1);
 			
 			stepNo ++;
 			if (stepNo < this.steps) {
 				for (forkNo=0; forkNo<forks; forkNo++) {
-					var newAngle = (forks > 1 ? angle - angleRange/2 + (forkNo) * (angleRange / (forks-1)) : angle);
-					// + (rng() - 0.5) * 6.28 * curving;
+					var newAngle = (forks > 1 ? angle - (angleRange/2) + (forkNo) * (angleRange / (forks-1)) : angle);
 					var newStepLength = stepLength * this.stepLengthFactor;
 					this.internalGenerate(ctx, rng, params, stepNo, x1, y1, newAngle, curving * this.stepCurvingFactor,
 										  newStepLength, trunkRadius * this.stepRadiusFactor, angleRange/forks);
 				}
 			}
 			if (this.leavesNumber > 0.0) {
-				var oldFillStyle = ctx.fillStyle;
-				ctx.fillStyle = this.leavesColorGradient.apply(rng());
-				ctx.beginPath();
-				var r = ((Math.abs(x1-x0)+Math.abs(y1-y0))/2) + (trunkRadius/4 * 10/(stepNo+1));
-				ctx.ellipse((x0+x1)/2, (y0+y1)/2, r, r, 0.0, 0, 6.28);
-				ctx.fill();
-				ctx.fillStyle = oldFillStyle;
+				this.drawLeaves(ctx, trunkRadius, x0, y0, createRNG(seed - 301 * stepNo), x1, y1, stepNo-1, this.steps);
 			}
 		}
         generate(ctx, seed, params) {
-			//console.log(this.toString() + ".generate(" + seed + ", " + params + ")");
 			if (!this.trunkColorGradient || !this.leavesColorGradient) {
 				return;
 			}

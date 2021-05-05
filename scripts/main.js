@@ -57,9 +57,6 @@ function saveToFile() {
 function loadFromFile() {
 	var browser = document.getElementById("loadFileBrowser");
 	browser.click();
-	if(data) {
-		
-	}
 }
 
 function fileForLoadingChoosen(event) {
@@ -72,6 +69,13 @@ function fileForLoadingChoosen(event) {
 		graph.start();
 	});
 }
+
+function loadFromInitial() {
+	var data = JSON.parse(window.initialGraph);
+	graph.configure(data);
+	graph.start();
+}
+
 
 function pause() {
 	graph.stop();
@@ -91,6 +95,7 @@ function initListeners() {
 function init() {
 	initListeners();
 	graph = new LGraph();
+	loadFromInitial();
 	var barHeight = 100;
 	var borderSize = 1;
 	var barWidth = 20;

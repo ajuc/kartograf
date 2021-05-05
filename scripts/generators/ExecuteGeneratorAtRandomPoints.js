@@ -10,7 +10,7 @@
 				(deepEqual(this.initialParams, other.initialParams));
         }
         generate(ctx, seed, params) {
-			console.log(this.toString() + ".generate(" + seed + ", " + anythingToString(this.initialParams) + ", " + anythingToString(params) + ")");
+			//console.log(this.toString() + ".generate(" + seed + ", " + anythingToString(this.initialParams) + ", " + anythingToString(params) + ")");
 			var rng = createRNG(seed);
 			
 			var mergedParams = Object.assign({}, params, this.initialParams);

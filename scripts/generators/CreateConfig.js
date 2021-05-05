@@ -50,14 +50,12 @@
 		
 		oldConnections = null;
 		
-		//this.addOutput("config", "Config");
-		
 		this.addWidget("button","+","", function(v){
 			that.properties.values.push({
 				text: "name_" + that.properties.values.length,
 				value: 0.0,
-				min: 0.0,
-				max: 1.0
+				min: -1000.0,
+				max: 1000.0
 			})
 			that.refreshWidgets();
 		});

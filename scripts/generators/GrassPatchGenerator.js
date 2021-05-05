@@ -115,6 +115,7 @@
 			this.setOutputData(0, null);
 			return;
 		}
+		this.setSize(this.computeSize());
 		
 		this.oldInputs = Object.assign({}, newInputs);
 		this.oldOutput = new GrassPatch(radius, density, length, placementRandomness, angleRandomness, colorGradient);
