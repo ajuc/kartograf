@@ -2,19 +2,19 @@ DONE:
 fix problems with nodes not updating sizes till you manualy change it [V]
 fix the problem with Show node incorrectly calculating its size based on size of input generators [V]
 fix the problem with show node painting outside of bounds if input generator misbehaves [V]
+implement SequentialGenerator (runs supplied generators in a set order)
 
 ALMOST:
 fix the problem with generators not always returning correct sizes
-
+refactor all Generators to use parameter maps instead of fields
+fix leaves generation in TreeGenerator
 
 TODO:
-refactor all Generators to use parameter maps instead of fields
 implement InterpolateConfig node that takes 2 configs and seed and returns different interpolation of them each time
 add easier name/min/max configuration from ui for CreateConfig nodes (maybe see color picker for ideas?)
 implement clearings and other obstacles (as a Region node passed to params that generators can add to (remove from?) and query)
-fix leaves generation in TreeGenerator
 fix the bug with ColorGradient being saved and loaded as Object instead of its proper type
-implement SequentialGenerator (runs supplied generators in a set order)
 implement CanvasAtlas(run supplied generator specified number of times with next random numbers and keep N results in canvases) and return generator that draws one of them each time
 implement curve drawing on InterpolateConfig node for changing the mapping function rng->result
-check licences
+implement generators creating several layers of images (for tree shadows for example)
+add sun direction as parameter for generators

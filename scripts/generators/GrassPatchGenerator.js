@@ -2,58 +2,52 @@
     var LiteGraph = global.LiteGraph;
 
 	class GrassPatch {
-		constructor(radius, density, length, placementRandomness, angleRandomness, colorGradient) {
-			this.radius = radius;
-			this.density = density;
-			this.length = length;
-			this.placementRandomness = placementRandomness;
-			this.angleRandomness = angleRandomness;
-			this.colorGradient = colorGradient;
+		constructor(initialParams) {
+			this.initialParams = initialParams;
 		}
 		isEqual(other) {
-            return (other instanceof GrassPatch) &&
-					(other.radius === this.radius) &&
-					(other.density === this.density) &&
-					(other.length === this.length) &&
-					(other.placementRandomness === this.placementRandomness) &&
-					(other.angleRandomness === this.angleRandomness) &&
-					(	other.colorGradient === this.colorGradient
-					 || (this.colorGradient && this.colorGradient.isEqual(other.colorGradient)));
+			return (other instanceof GrassPatch) &&
+				(deepEqual(this.initialParams, other.initialParams));
         }
         generate(ctx, seed, params) {
 			console.log(this.toString() + ".generate(" + seed + ", " + params + ")");
 			var rng = createRNG(seed);
+			
+			var mergedParams = Object.assign({}, params, this.initialParams);
+			var generator = mergedParams.generator;
+			var radius = mergedParams.radius;
+			var density = mergedParams.density;
+			var placementRandomness = mergedParams.placementRandomness;
+			var angleRandomness = mergedParams.angleRandomness;
+			var radius = mergedParams.radius;
+			var length = mergedParams.length;
+			var colorGradient = mergedParams.colorGradient;
+			
 			var i=0;
 			var x0,y0,x1,y1, angle;
-			var maxPossiblePatches = (this.radius * this.radius) / (256);
-			var patches = this.density * maxPossiblePatches;
+			var maxPossiblePatches = (radius * radius) / (256);
+			var patches = density * maxPossiblePatches;
 			
 			for (i=0; i<patches; i++) {
-				x0 = rng()*this.placementRandomness * 2 * this.radius;
-				y0 = rng()*this.placementRandomness * 2 * this.radius;
-				angle = rng()*this.angleRandomness + (i*6.28)/patches;
-				x1 = x0 + this.length * Math.cos(angle);
-				y1 = y0 + this.length * Math.sin(angle);
+				x0 = rng()*placementRandomness * 2 * radius;
+				y0 = rng()*placementRandomness * 2 * radius;
+				angle = rng()*angleRandomness + (i*6.28)/patches;
+				x1 = x0 + length * Math.cos(angle);
+				y1 = y0 + length * Math.sin(angle);
 				
 				ctx.beginPath();
 				ctx.moveTo(x0, y0);
-				ctx.strokeStyle = this.colorGradient.apply(rng());
+				ctx.strokeStyle = colorGradient.apply(rng());
 				ctx.lineTo(x1, y1);
 				ctx.stroke();
 			}
 			
 		}
 		getSize() {
-			return [2.0 * this.radius, 2.0 * this.radius];
+			return [2.0 * this.initialParams.radius, 2.0 * this.initialParams.radius];
 		}
 		toString() {
-			return "GrassPatch(" +
-				"r= " + this.radius + ", " +
-				"d= " + this.density + ", " +
-				"l= " + this.length + ", " +
-				"pr= " + this.placementRandomness + ", " +
-				"ar= " + this.angleRandomness + ", " +
-				"cg= " + this.colorGradient + ")";
+			return "GrassPatch(iP=" + anythingToString(this.initialParams) + ")";
 		}
 	}
 	
@@ -118,48 +112,9 @@
 		this.setSize(this.computeSize());
 		
 		this.oldInputs = Object.assign({}, newInputs);
-		this.oldOutput = new GrassPatch(radius, density, length, placementRandomness, angleRandomness, colorGradient);
+		this.oldOutput = new GrassPatch(this.oldInputs);
 		this.setOutputData(0, this.oldOutput);
     };
-
-	/*
-    GrassPatchGenerator.prototype.onDrawBackground = function(ctx) {
-        if (this.flags.collapsed) {
-            return;
-        }
-
-        var size = this.size;
-
-        var scale = (0.5 * size[1]) / this.properties.scale;
-        var colors = GrassPatchGenerator.colors;
-        var offset = size[1] * 0.5;
-
-        ctx.fillStyle = "#000";
-        ctx.fillRect(0, 0, size[0], size[1]);
-        ctx.strokeStyle = "#555";
-        ctx.beginPath();
-        ctx.moveTo(0, offset);
-        ctx.lineTo(size[0], offset);
-        ctx.stroke();
-
-        if (this.inputs) {
-            for (var i = 0; i < 4; ++i) {
-                var values = this.values[i];
-                if (!this.inputs[i] || !this.inputs[i].link) {
-                    continue;
-                }
-                ctx.strokeStyle = colors[i];
-                ctx.beginPath();
-                var v = values[0] * scale * -1 + offset;
-                ctx.moveTo(0, Math.clamp(v, 0, size[1]));
-                for (var j = 1; j < values.length && j < size[0]; ++j) {
-                    var v = values[j] * scale * -1 + offset;
-                    ctx.lineTo(j, Math.clamp(v, 0, size[1]));
-                }
-                ctx.stroke();
-            }
-        }
-    };*/
 
     LiteGraph.registerNodeType("generators/grassPatch", GrassPatchGenerator);
 

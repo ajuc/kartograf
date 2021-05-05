@@ -1,7 +1,7 @@
 (function(global) {
     var LiteGraph = global.LiteGraph;
 
-		class Tree {
+	class Tree {
 		constructor(radius, trunkRadius, steps, stepLength, stepLengthFactor, stepRadiusFactor, stepCurvingFactor,
 					stepForkingProbability, leavesNumber, leavesSize, leavesThickness, leavesRandomness,
 					trunkColorGradient, leavesColorGradient) {
@@ -19,7 +19,7 @@
 			this.leavesRandomness = leavesRandomness;
 			this.trunkColorGradient = trunkColorGradient;
 			this.leavesColorGradient = leavesColorGradient;
-			//console.log("trunkColorGradient=" + trunkColorGradient.toString() + " leavesColorGradient=" + leavesColorGradient.toString());
+
 		}
 		isEqual(other) {
             return (other instanceof Tree) &&
@@ -41,7 +41,6 @@
 					 || (this.leavesColorGradient && this.leavesColorGradient.isEqual(other.leavesColorGradient)));
         }
 		drawBranch(ctx, trunkRadius, x0, y0, rng, x1, y1) {
-			//return;
 			var strokeStyle = ctx.strokeStyle;
 			ctx.beginPath();
 			ctx.lineWidth = trunkRadius;
@@ -56,16 +55,20 @@
 				return;
 			}
 			var oldStrokeStyle = ctx.strokeStyle;
-			ctx.lineWidth = 5;
+			ctx.lineWidth = this.leavesThickness;
 			var R = ((Math.abs(branchX1-branchX0)+Math.abs(branchY1-branchY0))/2) + (trunkRadius * 80/(4*stepNo+1));
 			//ctx.ellipse((x0+x1)/2, (y0+y1)/2, r, r, 0.0, 0, 6.28);
 			var x = (branchX0 + branchX1)/2;
 			var y = (branchY0 + branchY1)/2;
 			
-			for (let i=0; i<this.leavesNumber/(Math.max(1,steps/2)); i++) {
-				var angle = rng() * 6.28;
+			var n = this.leavesNumber/(Math.max(1,steps/2));
+			if (n<1) {
+				return;
+			}
+			for (let i=0; i<n; i++) {
+				var angle = ((i*6.28)/(n) + this.leavesRandomness * rng() * 6.28) % 6.28;
 				var minR = Math.sqrt(Math.sqrt(Math.sqrt(rng()*rng()*rng()))) * R; //sqrt is needed cause it takes many more leaves to cover outer edge than inside
-				var maxR = minR + 5;
+				var maxR = minR + this.leavesSize;
 				var x0 = x + Math.cos(angle) * minR;
 				var y0 = y + Math.sin(angle) * minR;
 				var x1 = x + Math.cos(angle) * maxR;
