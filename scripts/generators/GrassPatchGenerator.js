@@ -22,6 +22,7 @@
 			var radius = mergedParams.radius;
 			var length = mergedParams.length;
 			var colorGradient = mergedParams.colorGradient;
+			var symmetric = mergedParams.symmetric;
 			
 			var i=0;
 			var x0,y0,x1,y1, angle;
@@ -40,11 +41,24 @@
 				ctx.strokeStyle = colorGradient.apply(rng());
 				ctx.lineTo(x1, y1);
 				ctx.stroke();
+				
+				var M = radius;
+				if (symmetric > 0.5) {
+					for (let dx = -M; dx <=M; dx += M) {
+						for (let dy = -M; dy <=M; dy += M) {
+							ctx.beginPath();
+							ctx.moveTo(x0+dx, y0+dy);
+							ctx.strokeStyle = colorGradient.apply(rng());
+							ctx.lineTo(x1+dx, y1+dy);
+							ctx.stroke();
+						}
+					}
+				}
 			}
 			
 		}
 		getSize() {
-			return [2.0 * this.initialParams.radius, 2.0 * this.initialParams.radius];
+			return [Math.round(2.0 * this.initialParams.radius), Math.round(2.0 * this.initialParams.radius)];
 		}
 		toString() {
 			return "GrassPatch(iP=" + anythingToString(this.initialParams) + ")";
@@ -52,11 +66,13 @@
 	}
 	
     function GrassPatchGenerator() {
+		this.addInput("initialParams", "Config");
 		this.addInput("radius", "Number");
 		this.addInput("density", "Number");
 		this.addInput("length", "Number");
 		this.addInput("angleRandomness", "Number");
 		this.addInput("placementRandomness", "Number");
+		this.addInput("symmetric", "Number");
 		this.addInput("colorGradient", "ColorGradient");
 		
 		this.addOutput("generator", "Generator");
@@ -66,7 +82,8 @@
 			density: 0.25,
 			length: 0.5,
 			angleRandomness: 0.25,
-			placementRandomness: 0.25
+			placementRandomness: 0.25,
+			symmetric: 1.0
 		};
 		this.offscreenCanvas = null;
 		this.oldInputs = {};
@@ -83,11 +100,13 @@
             return;
         }
 		
+		
 		var radius = this.getInputOrProperty("radius") * 25.0;
 		var density = this.getInputOrProperty("density");
 		var length = this.getInputOrProperty("length");
 		var angleRandomness = this.getInputOrProperty("angleRandomness");
 		var placementRandomness = this.getInputOrProperty("placementRandomness");
+		var symmetric = this.getInputOrProperty("symmetric");
 		var colorGradient = this.getInputOrProperty("colorGradient");
 		var newInputs = {
 			"radius": radius,
@@ -95,9 +114,12 @@
 			"length": length,
 			"angleRandomness": angleRandomness,
 			"placementRandomness": placementRandomness,
+			"symmetric": symmetric,
 			"colorGradient": colorGradient
 		};
 		
+		newInputs = Object.assign(newInputs, this.getInputOrProperty("initialParams"));
+				
 		if (newInputs === this.oldInputs || deepEqual(newInputs, this.oldInputs)) {
 			this.setOutputData(0, this.oldOutput);
 			return;

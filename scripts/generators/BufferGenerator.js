@@ -2,22 +2,25 @@
     var LiteGraph = global.LiteGraph;
 
 	class Buffer {
-		constructor(canvas, hash, size) {
-			this.canvas = canvas;
-			this.hash = hash;
-			this.size = size;
+		constructor(initialParams) {
+			this.initialParams = initialParams;
 		}
 		isEqual(other) {
-            return (other instanceof Buffer) && (other.hash === this.hash) && (other.size === this.size);
+            return (other instanceof Buffer) && (other.initialParams.hash === this.initialParams.hash) &&
+				(other.initialParams.size === this.initialParams.size);
         }
         generate(ctx, seed, params) {
-			ctx.drawImage(this.canvas, 0, 0);
+			var mergedParams = Object.assign({}, params, this.initialParams);
+			if (!mergedParams.canvas) {
+				return;
+			}
+			ctx.drawImage(mergedParams.canvas, 0, 0);
 		}
 		getSize() {
-			return this.size;
+			return this.initialParams.size;
 		}
 		toString() {
-			return "Buffer(" + this.hash + ")";
+			return "Buffer(" + this.initialParams.hash + ")";
 		}
 	}
 	
@@ -59,7 +62,10 @@
 		
 		var newInputs = {
 			"seed": seed,
-			"generator": generator
+			"canvas": this.canvas,
+			"generator": generator,
+			"hash": "" + generator,
+			"size": generator.getSize()
 		};
 		
 		if (newInputs === this.oldInputs || deepEqual(newInputs, this.oldInputs)) {
@@ -72,7 +78,7 @@
 		generator.generate(ctx, seed, params);
 		
 		this.oldInputs = newInputs;
-		this.oldOutput = new Buffer(this.canvas, "" + generator, size);
+		this.oldOutput = new Buffer(this.oldInputs);
 		this.setOutputData(0, this.oldOutput);
     };
 

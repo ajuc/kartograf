@@ -5,6 +5,10 @@ function isObject(object) {
 function mergeParams(first, second) {
 	var result = {};
 	
+	for (var i in o) {
+			str += i + "=" + anythingToString(o[i]) + (count + 1 < Object.keys(o).length ? ",\n" : "");
+			count++;
+	}
 	
 	return result;
 }
@@ -86,4 +90,55 @@ function createOffscreenBuffer(w, h) {
 	offScreenCanvas.width = w;
 	offScreenCanvas.height = h;
 	return offScreenCanvas;
+}
+
+
+function rgba(r, g, b, a){
+  r = Math.floor(r);
+  g = Math.floor(g);
+  b = Math.floor(b);
+  return ["rgba(",r,",",g,",",b,",",a,")"].join("");
+}
+
+function rgb(r, g, b){
+  r = Math.floor(r);
+  g = Math.floor(g);
+  b = Math.floor(b);
+  return ["rgb(",r,",",g,",",b,")"].join("");
+}
+
+function saw(x) {
+	if (x < 0) x = -x;
+	x = x % (2 * Math.PI);
+	if (x < Math.PI) {
+		return 2.0 * (x / Math.PI) - 1.0;
+	} else {
+		return 1.0 - 2.0 * (x - Math.PI) / Math.PI;
+	}
+}
+
+function roundedSaw(x) {
+	return 2.0 * Math.abs(Math.sin(x)) - 0.5;
+}
+
+function lastInputWithMatchingName(node, regex) {
+	if (!node.inputs) {
+		return null;
+	}
+	var result = null;
+	var lastNumber = null;
+	for (let i in node.inputs) {
+		var current = node.inputs[i];
+		var matchingResult = regex.exec(current.name);
+		if (matchingResult) {
+			if (matchingResult.length>1) {
+				var number = parseInt(matchingResult[1]);
+				if (!lastNumber || number>lastNumber) {
+					result = current;
+					lastNumber = number;
+				}
+			}
+		}
+	}
+	return result;
 }

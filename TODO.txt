@@ -1,15 +1,8 @@
-DONE:
-fix problems with nodes not updating sizes till you manualy change it [V]
-fix the problem with Show node incorrectly calculating its size based on size of input generators [V]
-fix the problem with show node painting outside of bounds if input generator misbehaves [V]
-implement SequentialGenerator (runs supplied generators in a set order)
-
-ALMOST:
-fix the problem with generators not always returning correct sizes
-refactor all Generators to use parameter maps instead of fields
-fix leaves generation in TreeGenerator
+IN PROGRESS:
+change SequentialGenerator to allow arbitrary number of generators
 
 TODO:
+port legacy grass generator from outdoorBattlemapGenerator project
 implement InterpolateConfig node that takes 2 configs and seed and returns different interpolation of them each time
 add easier name/min/max configuration from ui for CreateConfig nodes (maybe see color picker for ideas?)
 implement clearings and other obstacles (as a Region node passed to params that generators can add to (remove from?) and query)
@@ -18,3 +11,17 @@ implement CanvasAtlas(run supplied generator specified number of times with next
 implement curve drawing on InterpolateConfig node for changing the mapping function rng->result
 implement generators creating several layers of images (for tree shadows for example)
 add sun direction as parameter for generators
+implement Function type that returns x->y function configured by drawing a curve
+implement LeafGenerator (to be used by TreeGenerator later)
+fix leaves generation in TreeGenerator
+fix the problem with generators not always returning correct sizes
+fix seed handling (so that the seed given at execution overrides any previous seeds even with embedded generators) - it's not this problem
+
+DONE:
+fix problems with nodes not updating sizes till you manualy change it [v]
+fix the problem with Show node incorrectly calculating its size based on size of input generators [v]
+fix the problem with show node painting outside of bounds if input generator misbehaves [v]
+implement SequentialGenerator (runs supplied generators in a set order) [v]
+refactor all Generators to use parameter maps instead of fields [v]
+implement TilingGenerator [v]
+port legacy tree generator from outdoorBattlemapGenerator project (drawing only) [v]

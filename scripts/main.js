@@ -92,22 +92,23 @@ function initListeners() {
 	});
 }
 
+function refreshSizes() {
+	var barHeight = 100;
+	var borderSize = 1;
+	var barWidth = 20;
+	var resultCanvas = document.getElementById("resultCanvas");
+	var graphCanvas = document.getElementById("graphCanvas");
+	graphCanvas.width = 15*window.innerWidth/16 - borderSize*4 - barWidth;
+	graphCanvas.height = window.innerHeight - barHeight;
+	resultCanvas.width = window.innerWidth/16 - borderSize*4 - barWidth;
+	resultCanvas.height = window.innerHeight - barHeight;
+}
+
 function init() {
 	initListeners();
 	graph = new LGraph();
 	loadFromInitial();
-	var barHeight = 100;
-	var borderSize = 1;
-	var barWidth = 20;
-	
-	var resultCanvas = document.getElementById("resultCanvas");
-	var graphCanvas = document.getElementById("graphCanvas");
-	graphCanvas.width = 11*window.innerWidth/12 - borderSize*4 - barWidth;
-	graphCanvas.height = window.innerHeight - barHeight;
-	resultCanvas.width = window.innerWidth/12 - borderSize*4 - barWidth;
-	resultCanvas.height = window.innerHeight - barHeight;
-	
+	refreshSizes();
 	graphCanvas = new LGraphCanvas("#graphCanvas", graph);
-	
 	graph.start()
 }
