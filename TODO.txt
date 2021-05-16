@@ -1,8 +1,7 @@
 IN PROGRESS:
-change SequentialGenerator to allow arbitrary number of generators
+port legacy grass generator from outdoorBattlemapGenerator project
 
 TODO:
-port legacy grass generator from outdoorBattlemapGenerator project
 implement InterpolateConfig node that takes 2 configs and seed and returns different interpolation of them each time
 add easier name/min/max configuration from ui for CreateConfig nodes (maybe see color picker for ideas?)
 implement clearings and other obstacles (as a Region node passed to params that generators can add to (remove from?) and query)
@@ -25,3 +24,4 @@ implement SequentialGenerator (runs supplied generators in a set order) [v]
 refactor all Generators to use parameter maps instead of fields [v]
 implement TilingGenerator [v]
 port legacy tree generator from outdoorBattlemapGenerator project (drawing only) [v]
+change SequentialGenerator to allow arbitrary number of generators [v]
